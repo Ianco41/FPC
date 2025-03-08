@@ -140,7 +140,7 @@ if ($db_type == "access") {
                                 // Close the connection
                                 odbc_close($conn);
                             }
-                        ?>  
+                        ?>
                     </tbody>
                 </table>
                 </div>
@@ -262,6 +262,7 @@ if ($db_type == "access") {
             modal(Ids);
         }
         });
+        
         function modal(Id) {
         fetch(`GET_row.php?booking_id=${Id}`)
             .then(response => response.json())
