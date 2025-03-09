@@ -40,17 +40,21 @@ if ($db_type == "access") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SNR</title>
 
-    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet"> --.
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet"> -->
     <!-- <link href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap5.min.css" rel="stylesheet"> -->
 
-    <<link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
-        <link rel="stylesheet" href="assets/vendor/bootstrap/css/all.min.css">
-        <link rel="stylesheet" href="assets/vendor/bootstrap/css/fontawesome.min.css">
-        <link rel="stylesheet" href="assets/DataTables/datatables.min.css" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css">
-        <script src="https://kit.fontawesome.com/ae360af17e.js" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="style.css">
-
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/all.min.css">
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/fontawesome.min.css">
+    <link rel="stylesheet" href="assets/DataTables/datatables.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/ae360af17e.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        section{
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -66,13 +70,13 @@ if ($db_type == "access") {
                         Admin Elements
                     </li>
                     <li class="sidebar-item">
-                        <a href="#main" class="sidebar-link">
+                        <a href="#main" class="sidebar-link" onclick="showMain()">
                             <i class="fa-solid fa-list pe-2"></i>
                             Dashboard
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a href="#addnew" class="sidebar-link">
+                        <a href="#addnew" class="sidebar-link" onclick="showAddNew()">
                             <i class="fa-solid fa-add pe-2"></i>
                             Add New
                         </a>

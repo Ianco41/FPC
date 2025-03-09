@@ -1,110 +1,120 @@
 <?php
-    include "conn.php";
+include "conn.php";
 
-    // Dropdown options (You can update these based on your database values)
-    $selectmonths = ["January", "February", "March",
-                        "April", "May", "June", 
-                        "July", "August", "September", 
-                        "October", "November", "December"];
-    $NT_NF = ["NTPI", "NFLD"];
+// Dropdown options (You can update these based on your database values)
+$selectmonths = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+];
+$NT_NF = ["NTPI", "NFLD"];
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Collect form data safely (handling multiple entries)
-        $FY = $_POST['FY'] ?? "FY25";
-        $MONTH = $_POST['MONTH'] ?? [];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Collect form data safely (handling multiple entries)
+    $FY = $_POST['FY'] ?? "FY25";
+    $MONTH = $_POST['MONTH'] ?? [];
 
-        // Ensure arrays are set to prevent errors
-        $DATES = $_POST['DATE'] ?? [];
-        $CATEGORIES = $_POST['CATEGORY'] ?? [];
-        $TRIGGERS = $_POST['TRIGGER'] ?? [];
-        $NT_NFS = $_POST['NT_NF'] ?? [];
-        $ISSUES = $_POST['ISSUE'] ?? [];
-        $PART_NOS = $_POST['PART_NO'] ?? [];
-        $PRODUCTS = $_POST['PRODUCT'] ?? [];
-        $LOT_SUBLOTS = $_POST['LOT_SUBLOT'] ?? [];
-        $INS = $_POST['IN'] ?? [];
-        $OUTS = $_POST['OUT'] ?? [];
-        $REJECTS = $_POST['REJECT'] ?? [];
+    // Ensure arrays are set to prevent errors
+    $DATES = $_POST['DATE'] ?? [];
+    $CATEGORIES = $_POST['CATEGORY'] ?? [];
+    $TRIGGERS = $_POST['TRIGGER'] ?? [];
+    $NT_NFS = $_POST['NT_NF'] ?? [];
+    $ISSUES = $_POST['ISSUE'] ?? [];
+    $PART_NOS = $_POST['PART_NO'] ?? [];
+    $PRODUCTS = $_POST['PRODUCT'] ?? [];
+    $LOT_SUBLOTS = $_POST['LOT_SUBLOT'] ?? [];
+    $INS = $_POST['IN'] ?? [];
+    $OUTS = $_POST['OUT'] ?? [];
+    $REJECTS = $_POST['REJECT'] ?? [];
 
-        // Validate if required fields have data
-        if (empty($DATES) || empty($CATEGORIES)) {
-            die("Error: Missing required data.");
-        }
-
-        // Database Insertion Loop for Multiple Records
-        foreach ($CATEGORIES as $index => $CATEGORY) {
-            $MONTH_VAL = $MONTH[$index] ?? '';
-            $DATE = $DATES[$index] ?? date('Y-m-d');
-            $TRIGGER = $TRIGGERS[$index] ?? '';
-            $NT_NF = $NT_NFS[$index] ?? '';
-            $ISSUE = $ISSUES[$index] ?? '';
-            $PART_NO = $PART_NOS[$index] ?? '';
-            $PRODUCT = $PRODUCTS[$index] ?? '';
-            $LOT_SUBLOT = $LOT_SUBLOTS[$index] ?? '';
-            $IN = $INS[$index] ?? 0;
-            $OUT = $OUTS[$index] ?? 0;
-            $REJECT = $REJECTS[$index] ?? 0;
-
-            if ($db_type == "access") {
-                // Use MS Access Syntax (square brackets for reserved words)
-                $sql = "INSERT INTO FPC (FY, MONTH, [DATE], CATEGORY, [TRIGGER], NT_NF, ISSUE, [PART NO], PRODUCT, [LOT/SUBLOT], [IN], [OUT], REJECT) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-                $stmt = odbc_prepare($conn, $sql);
-                $result = odbc_execute($stmt, [$FY, $MONTH_VAL, $DATE, $CATEGORY, $TRIGGER, $NT_NF, $ISSUE, $PART_NO, $PRODUCT, $LOT_SUBLOT, $IN, $OUT, $REJECT]);
-
-                if (!$result) {
-                    die("Error inserting record into Access: " . odbc_errormsg($conn));
-                }
-            } else {
-                // Use MySQL Syntax with backticks for reserved words
-                $sql = "INSERT INTO FPC (FY, MONTH, DATE, CATEGORY, `TRIGGER`, NT_NF, ISSUE, PART_NO, PRODUCT, LOT_SUBLOT, IN_VALUE, OUT_VALUE, REJECT) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-                $stmt = mysqli_prepare($conn, $sql);
-                if (!$stmt) {
-                    die("MySQL prepare failed: " . mysqli_error($conn));
-                }
-
-                mysqli_stmt_bind_param(
-                    $stmt,
-                    "ssssssssssiii",
-                    $FY,
-                    $MONTH_VAL,
-                    $DATE,
-                    $CATEGORY,
-                    $TRIGGER,
-                    $NT_NF,
-                    $ISSUE,
-                    $PART_NO,
-                    $PRODUCT,
-                    $LOT_SUBLOT,
-                    $IN,
-                    $OUT,
-                    $REJECT
-                );
-
-                $result = mysqli_stmt_execute($stmt);
-
-                if (!$result) {
-                    die("Error inserting record into MySQL: " . mysqli_error($conn));
-                }
-
-                mysqli_stmt_close($stmt);
-            }
-        }
-
-        // Close database connection
-        if ($db_type == "access") {
-            odbc_close($conn);
-        } else {
-            mysqli_close($conn);
-        }
-
-        // Redirect after success
-        header("Location: index.php");
-        exit();
+    // Validate if required fields have data
+    if (empty($DATES) || empty($CATEGORIES)) {
+        die("Error: Missing required data.");
     }
+
+    // Database Insertion Loop for Multiple Records
+    foreach ($CATEGORIES as $index => $CATEGORY) {
+        $MONTH_VAL = $MONTH[$index] ?? '';
+        $DATE = $DATES[$index] ?? date('Y-m-d');
+        $TRIGGER = $TRIGGERS[$index] ?? '';
+        $NT_NF = $NT_NFS[$index] ?? '';
+        $ISSUE = $ISSUES[$index] ?? '';
+        $PART_NO = $PART_NOS[$index] ?? '';
+        $PRODUCT = $PRODUCTS[$index] ?? '';
+        $LOT_SUBLOT = $LOT_SUBLOTS[$index] ?? '';
+        $IN = $INS[$index] ?? 0;
+        $OUT = $OUTS[$index] ?? 0;
+        $REJECT = $REJECTS[$index] ?? 0;
+
+        if ($db_type == "access") {
+            // Use MS Access Syntax (square brackets for reserved words)
+            $sql = "INSERT INTO FPC (FY, MONTH, [DATE], CATEGORY, [TRIGGER], NT_NF, ISSUE, [PART NO], PRODUCT, [LOT/SUBLOT], [IN], [OUT], REJECT) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            $stmt = odbc_prepare($conn, $sql);
+            $result = odbc_execute($stmt, [$FY, $MONTH_VAL, $DATE, $CATEGORY, $TRIGGER, $NT_NF, $ISSUE, $PART_NO, $PRODUCT, $LOT_SUBLOT, $IN, $OUT, $REJECT]);
+
+            if (!$result) {
+                die("Error inserting record into Access: " . odbc_errormsg($conn));
+            }
+        } else {
+            // Use MySQL Syntax with backticks for reserved words
+            $sql = "INSERT INTO FPC (FY, MONTH, DATE, CATEGORY, `TRIGGER`, NT_NF, ISSUE, PART_NO, PRODUCT, LOT_SUBLOT, IN_VALUE, OUT_VALUE, REJECT) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            $stmt = mysqli_prepare($conn, $sql);
+            if (!$stmt) {
+                die("MySQL prepare failed: " . mysqli_error($conn));
+            }
+
+            mysqli_stmt_bind_param(
+                $stmt,
+                "ssssssssssiii",
+                $FY,
+                $MONTH_VAL,
+                $DATE,
+                $CATEGORY,
+                $TRIGGER,
+                $NT_NF,
+                $ISSUE,
+                $PART_NO,
+                $PRODUCT,
+                $LOT_SUBLOT,
+                $IN,
+                $OUT,
+                $REJECT
+            );
+
+            $result = mysqli_stmt_execute($stmt);
+
+            if (!$result) {
+                die("Error inserting record into MySQL: " . mysqli_error($conn));
+            }
+
+            mysqli_stmt_close($stmt);
+        }
+    }
+
+    // Close database connection
+    if ($db_type == "access") {
+        odbc_close($conn);
+    } else {
+        mysqli_close($conn);
+    }
+
+    // Redirect after success
+    header("Location: index.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
