@@ -146,7 +146,7 @@ if ($db_type == "access") {
             </div>
         </aside>
         <div class="main">
-            <nav class="navbar navbar-expand px-3 border-bottom">
+            <nav class="navbar navbar-expand px-3 border-bottom" >
                 <button class="btn" id="sidebar-toggle" type="button">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -178,12 +178,12 @@ if ($db_type == "access") {
                                         <div class="col-6">
                                             <div class="p-3 m-1">
                                                 <h4>Welcome Back, Admin</h4>
-                                                <p class="mb-0">Admin Dashboard, CodzSword</p>
+                                                <p class="mb-0">Admin Dashboard, ADMIN</p>
                                             </div>
                                         </div>
                                         <div class="col-6 align-self-end text-end">
-                                            <img src="image/customer-support.jpg" class="img-fluid illustration-img"
-                                                alt="">
+                                            <img src="" class="img-fluid illustration-img"
+                                                alt="HELLO!">
                                         </div>
                                     </div>
                                 </div>
@@ -195,10 +195,10 @@ if ($db_type == "access") {
                                     <div class="d-flex align-items-start">
                                         <div class="flex-grow-1">
                                             <h4 class="mb-2">
-                                                $ 78.00
+                                                14
                                             </h4>
                                             <p class="mb-2">
-                                                Total Earnings
+                                                Total Entry Today
                                             </p>
                                             <div class="mb-0">
                                                 <span class="badge text-success me-2">
@@ -310,6 +310,138 @@ if ($db_type == "access") {
                     </div>
             </main>
             <section class="addnew" id="addnew">
+                <div class="card" style="max-width: 80%; margin: 0 auto;">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h2 class="mb-0">Add New Record</h2>
+                    </div>
+
+                    <div class="card-body">
+                        <?php if (!empty($message)) echo "<div class='alert alert-info'>$message</div>"; ?>
+
+                        <form method="post" id="recordForm">
+                            <div id="recordContainer">
+                                <div class="record-entry">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <div class="form-floating">
+                                                <!--<label for="MONTH" class="form-label">Month</label>-->
+                                                <select class="form-select" id="MONTH" name="MONTH[]" required>
+                                                    <option value="">Select Month</option>
+                                                    <?php foreach ($selectmonths as $month) echo "<option value='$month'>$month</option>"; ?>
+                                                </select>
+                                                <label for="MONTH" class="form-label">Month</label>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-6 mb-3">
+                                            <div class="form-floating">
+                                                <input type="text" class="form-control" id="DATE" name="DATE[]" value="<?php echo date('Y-m-d'); ?>" readonly>
+                                                <label for="DATE" class="form-label">Date</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4 mb-3">
+                                            <div class="form-floating">
+                                                <!---->
+                                                <input type="text" class="form-control" id="category_input" name="CATEGORY[]" placeholder="Type Category..."
+                                                    data-suggestions="category_suggestions"
+                                                    onkeyup="fetchSuggestions(event, 'fetch_suggestion.php')" required>
+                                                <div id="category_suggestions" class="suggestion-box"></div>
+                                                <label for="CATEGORY" class="form-label">Category</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4 mb-3 position-relative">
+                                            <div class="form-floating">
+                                                <!--<label for="TRIGGER" class="form-label">Trigger</label>-->
+                                                <input type="text" class="form-control" id="triggers_input" name="TRIGGER[]" placeholder="Type Trigger..."
+                                                    data-suggestions="trigger_suggestions"
+                                                    onkeyup="fetchSuggestions(event, 'GET_trigger.php')" required>
+                                                <div id="trigger_suggestions" class="suggestion-box"></div>
+                                                <label for="TRIGGER" class="form-label">Trigger</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4 mb-3">
+                                            <div class="form-floating">
+                                                <!--<label for="NT_NF" class="form-label">NT/NF</label>-->
+                                                <select class="form-select" id="NT_NF" name="NT_NF[]" required>
+                                                    <option value="">Select NT/NF</option>
+                                                    <?php foreach ($NT_NF as $value) echo "<option value='$value'>$value</option>"; ?>
+                                                </select>
+                                                <label for="NT_NF" class="form-label">NT/NF</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4 mb-3 position-relative">
+                                            <div class="form-floating">
+                                                <!---->
+                                                <input type="text" class="form-control" id="issues_input" name="ISSUE[]" placeholder="Type Issue..."
+                                                    data-suggestions="issues_suggestions"
+                                                    onkeyup="fetchSuggestions(event, 'GET_issue.php')" required>
+                                                <div id="issues_suggestions" class="suggestion-box"></div>
+                                                <label for="ISSUE" class="form-label">Issue</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3 position-relative">
+                                            <div class="form-floating">
+                                                <!--<label for="PART_NO" class="form-label">Part No</label>-->
+                                                <input type="text" class="form-control" id="parnum_input" name="PART_NO[]" placeholder="Type Part No..."
+                                                    onkeyup="fetchSuggestions_parnum()" required>
+                                                <div id="suggestions" class="suggestion-box"></div>
+                                                <label for="PART_NO" class="form-label">Part No</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4 mb-3">
+                                            <div class="form-floating">
+                                                <input type="text" class="form-control" id="product_name" name="PRODUCT[]" placeholder="Part Name" required>
+                                                <label for="PRODUCT" class="form-label">Product</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="LOT_SUBLOT" name="LOT_SUBLOT[]" placeholder="Part Name" required>
+                                            <label for="LOT_SUBLOT" class="form-label">Lot/Sublot</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4 mb-3">
+                                            <label for="IN" class="form-label">IN</label>
+                                            <input type="number" class="form-control" id="IN" name="IN[]" required>
+                                        </div>
+
+                                        <div class="col-md-4 mb-3">
+                                            <label for="OUT" class="form-label">OUT</label>
+                                            <input type="number" class="form-control" id="OUT" name="OUT[]" required>
+                                        </div>
+
+                                        <div class="col-md-4 mb-3">
+                                            <label for="REJECT" class="form-label">Reject</label>
+                                            <input type="number" class="form-control" id="REJECT" name="REJECT[]" required>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-danger btn-sm remove-record">Remove</button>
+                                    <hr>
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2" style="max-width: 60%; margin: 0 auto;">
+                                <button type="button" class="btn btn-info" id="addMore">Add More</button>
+                                <button type="submit" class="btn btn-success">Submit</button>
+                                <a href="index.php" class="btn btn-danger" role="button">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
 
             </section>
 
@@ -399,6 +531,17 @@ if ($db_type == "access") {
     <script src="assets/vendor/bootstrap/js/all.min.js"></script>
     <script src="assets/vendor/bootstrap/js/fontawesome.min.js"></script>
     <script src="assets/DataTables/datatables.min.js"></script>
+    <script>
+        function showAddNew() {
+            document.getElementById("main").style.display = "none";
+            document.getElementById("addnew").style.display = "block";
+        }
+
+        function showMain() {
+            document.getElementById("main").style.display = "block";
+            document.getElementById("addnew").style.display = "none";
+        }
+    </script>
     <script>
         $(document).ready(function() {
             var table = new DataTable('#myTable', {
